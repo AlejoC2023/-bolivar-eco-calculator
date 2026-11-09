@@ -35,6 +35,22 @@
             margin-bottom: 30px;
         }
 
+        .language-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .language-container select {
+            width: auto;
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: 1px solid #a7f3d0;
+            background: white;
+            color: #047857;
+            font-weight: 600;
+        }
+
         .logo {
             font-size: 45px;
             margin-bottom: 10px;
@@ -109,11 +125,20 @@
             font-family: inherit;
             cursor: pointer;
             transition: 0.2s;
+            margin-top: 10px;
         }
 
         button:hover {
             background: #047857;
             transform: translateY(-2px);
+        }
+
+        .print-button {
+            background: #065f46;
+        }
+
+        .print-button:hover {
+            background: #064e3b;
         }
 
         .results {
@@ -162,6 +187,12 @@
             margin-top: 25px;
         }
 
+        /* Print certificate - hidden on screen */
+
+        #printReport {
+            display: none;
+        }
+
         @media (max-width: 600px) {
             h1 {
                 font-size: 25px;
@@ -175,6 +206,87 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Print styles */
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                color: #1f2937;
+            }
+
+            .container {
+                display: none;
+            }
+
+            #printReport {
+                display: block;
+                max-width: 750px;
+                margin: 40px auto;
+                padding: 45px;
+                border: 5px double #059669;
+                text-align: center;
+                font-family: 'Inter', sans-serif;
+            }
+
+            .certificate-logo {
+                font-size: 55px;
+                margin-bottom: 15px;
+            }
+
+            .certificate-title {
+                color: #047857;
+                font-size: 30px;
+                margin-bottom: 12px;
+            }
+
+            .certificate-subtitle {
+                color: #64748b;
+                margin-bottom: 35px;
+            }
+
+            .certificate-results {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+                margin: 30px 0;
+            }
+
+            .certificate-box {
+                background: #ecfdf5 !important;
+                border: 1px solid #a7f3d0;
+                padding: 25px;
+                border-radius: 12px;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .certificate-box h3 {
+                color: #047857;
+                margin-bottom: 12px;
+            }
+
+            .certificate-box p {
+                color: #065f46;
+                font-size: 25px;
+                font-weight: 800;
+            }
+
+            .certificate-details {
+                text-align: left;
+                line-height: 2;
+                margin-top: 25px;
+                border-top: 1px solid #d1fae5;
+                padding-top: 20px;
+            }
+
+            .certificate-footer {
+                margin-top: 45px;
+                color: #047857;
+                font-weight: 600;
+            }
+        }
     </style>
 </head>
 
@@ -183,45 +295,93 @@
     <div class="container">
 
         <header>
+
+            <div class="language-container">
+                <select id="language" onchange="changeLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                </select>
+            </div>
+
             <div class="logo">🌱</div>
-            <h1>Bolívar Eco-Calculator</h1>
-            <p>Discover your environmental impact and make a difference!</p>
+
+            <h1 data-i18n="title">Bolívar Eco-Calculator</h1>
+
+            <p data-i18n="subtitle">
+                Discover your environmental impact and make a difference!
+            </p>
+
         </header>
 
         <div class="card">
 
-            <h2>🌍 Calculate Your Weekly Impact</h2>
+            <h2 data-i18n="calculatorTitle">
+                🌍 Calculate Your Weekly Impact
+            </h2>
 
             <form id="ecoForm">
 
                 <div class="form-group">
-                    <label for="transport">🚍 Transportation to school:</label>
+
+                    <label for="transport" data-i18n="transportLabel">
+                        🚍 Transportation to school:
+                    </label>
+
                     <select id="transport" required>
-                        <option value="">Select transportation</option>
-                        <option value="1">Bus</option>
-                        <option value="3">Private car</option>
-                        <option value="1.5">Shared car</option>
-                        <option value="0">Bicycle / Walking</option>
+                        <option value="" data-i18n="transportPlaceholder">
+                            Select transportation
+                        </option>
+
+                        <option value="1" data-i18n="bus">Bus</option>
+                        <option value="3" data-i18n="privateCar">Private car</option>
+                        <option value="1.5" data-i18n="sharedCar">Shared car</option>
+                        <option value="0" data-i18n="bicycle">Bicycle / Walking</option>
                     </select>
+
                 </div>
 
                 <div class="form-group">
-                    <label for="paper">📄 Paper sheets used per day:</label>
-                    <input type="number" id="paper" min="0" step="1" required>
+
+                    <label for="paper" data-i18n="paperLabel">
+                        📄 Paper sheets used per day:
+                    </label>
+
+                    <input
+                        type="number"
+                        id="paper"
+                        min="0"
+                        step="1"
+                        required
+                        data-i18n-placeholder="paperPlaceholder"
+                        placeholder="Enter number of sheets"
+                    >
+
                 </div>
 
                 <div class="form-group">
-                    <label for="recycling">♻️ Recycling level:</label>
+
+                    <label for="recycling" data-i18n="recyclingLabel">
+                        ♻️ Recycling level:
+                    </label>
+
                     <select id="recycling" required>
-                        <option value="">Select recycling level</option>
-                        <option value="0">None</option>
-                        <option value="0.25">Low</option>
-                        <option value="0.50">Medium</option>
-                        <option value="0.75">High</option>
+
+                        <option value="" data-i18n="recyclingPlaceholder">
+                            Select recycling level
+                        </option>
+
+                        <option value="0" data-i18n="none">None</option>
+                        <option value="0.25" data-i18n="low">Low</option>
+                        <option value="0.50" data-i18n="medium">Medium</option>
+                        <option value="0.75" data-i18n="high">High</option>
+
                     </select>
+
                 </div>
 
-                <button type="submit">🌿 Calculate Impact</button>
+                <button type="submit" data-i18n="calculateButton">
+                    🌿 Calculate Impact
+                </button>
 
             </form>
 
@@ -229,56 +389,265 @@
 
         <div class="card">
 
-            <h2>📊 Your Weekly Results</h2>
+            <h2 data-i18n="resultsTitle">
+                📊 Your Weekly Results
+            </h2>
 
             <div class="results">
 
                 <div class="result-box">
+
                     <div class="result-icon">🌫️</div>
-                    <h3>Weekly CO₂</h3>
+
+                    <h3 data-i18n="co2Title">Weekly CO₂</h3>
+
                     <p id="co2Result">-- kg</p>
+
                 </div>
 
                 <div class="result-box">
+
                     <div class="result-icon">🏆</div>
-                    <h3>Eco-Points</h3>
+
+                    <h3 data-i18n="pointsTitle">Eco-Points</h3>
+
                     <p id="pointsResult">--</p>
+
                 </div>
 
             </div>
 
             <p id="message"></p>
 
+            <button
+                type="button"
+                class="print-button"
+                onclick="printReport()"
+                data-i18n="printButton"
+            >
+                🖨️ Print / Save PDF Report
+            </button>
+
         </div>
 
-        <footer>
+        <footer data-i18n="footer">
             Colegio Bolívar | Building a greener future 🌎
         </footer>
 
     </div>
 
+    <!-- Printable certificate -->
+
+    <div id="printReport">
+
+        <div class="certificate-logo">🌱</div>
+
+        <h1 class="certificate-title" data-i18n="certificateTitle">
+            ECOLOGICAL CERTIFICATE
+        </h1>
+
+        <p class="certificate-subtitle" data-i18n="certificateSubtitle">
+            Bolívar Eco-Calculator - Weekly Environmental Report
+        </p>
+
+        <h2 data-i18n="certificateMessage">
+            Your environmental impact results
+        </h2>
+
+        <div class="certificate-results">
+
+            <div class="certificate-box">
+                <h3 data-i18n="co2Title">Weekly CO₂</h3>
+                <p id="printCO2">-- kg</p>
+            </div>
+
+            <div class="certificate-box">
+                <h3 data-i18n="pointsTitle">Eco-Points</h3>
+                <p id="printPoints">--</p>
+            </div>
+
+        </div>
+
+        <div class="certificate-details">
+
+            <p>
+                <strong data-i18n="transportDetail">Transportation:</strong>
+                <span id="printTransport"></span>
+            </p>
+
+            <p>
+                <strong data-i18n="paperDetail">Paper sheets per day:</strong>
+                <span id="printPaper"></span>
+            </p>
+
+            <p>
+                <strong data-i18n="recyclingDetail">Recycling level:</strong>
+                <span id="printRecycling"></span>
+            </p>
+
+            <p>
+                <strong data-i18n="dateDetail">Report date:</strong>
+                <span id="printDate"></span>
+            </p>
+
+        </div>
+
+        <div class="certificate-footer" data-i18n="certificateFooter">
+            Every small action makes a difference! 🌍
+            <br>
+            Colegio Bolívar
+        </div>
+
+    </div>
+
     <script>
+
+        // Language translations
+
+        const translations = {
+
+            en: {
+                title: "Bolívar Eco-Calculator",
+                subtitle: "Discover your environmental impact and make a difference!",
+                calculatorTitle: "🌍 Calculate Your Weekly Impact",
+                transportLabel: "🚍 Transportation to school:",
+                transportPlaceholder: "Select transportation",
+                bus: "Bus",
+                privateCar: "Private car",
+                sharedCar: "Shared car",
+                bicycle: "Bicycle / Walking",
+                paperLabel: "📄 Paper sheets used per day:",
+                paperPlaceholder: "Enter number of sheets",
+                recyclingLabel: "♻️ Recycling level:",
+                recyclingPlaceholder: "Select recycling level",
+                none: "None",
+                low: "Low",
+                medium: "Medium",
+                high: "High",
+                calculateButton: "🌿 Calculate Impact",
+                resultsTitle: "📊 Your Weekly Results",
+                co2Title: "Weekly CO₂",
+                pointsTitle: "Eco-Points",
+                printButton: "🖨️ Print / Save PDF Report",
+                footer: "Colegio Bolívar | Building a greener future 🌎",
+                success: "Calculation completed successfully!",
+                error: "Please complete all fields with valid values.",
+                certificateTitle: "ECOLOGICAL CERTIFICATE",
+                certificateSubtitle: "Bolívar Eco-Calculator - Weekly Environmental Report",
+                certificateMessage: "Your environmental impact results",
+                transportDetail: "Transportation:",
+                paperDetail: "Paper sheets per day:",
+                recyclingDetail: "Recycling level:",
+                dateDetail: "Report date:",
+                certificateFooter: "Every small action makes a difference! 🌍\nColegio Bolívar",
+                printError: "Please calculate your environmental impact before printing."
+            },
+
+            es: {
+                title: "Bolívar Eco-Calculator",
+                subtitle: "¡Descubre tu impacto ambiental y haz la diferencia!",
+                calculatorTitle: "🌍 Calcula tu impacto semanal",
+                transportLabel: "🚍 Transporte al colegio:",
+                transportPlaceholder: "Selecciona el transporte",
+                bus: "Bus",
+                privateCar: "Carro privado",
+                sharedCar: "Carro compartido",
+                bicycle: "Bicicleta / Caminando",
+                paperLabel: "📄 Hojas de papel utilizadas al día:",
+                paperPlaceholder: "Ingresa el número de hojas",
+                recyclingLabel: "♻️ Nivel de reciclaje:",
+                recyclingPlaceholder: "Selecciona el nivel de reciclaje",
+                none: "Ninguno",
+                low: "Bajo",
+                medium: "Medio",
+                high: "Alto",
+                calculateButton: "🌿 Calcular impacto",
+                resultsTitle: "📊 Tus resultados semanales",
+                co2Title: "CO₂ semanal",
+                pointsTitle: "Eco-Points",
+                printButton: "🖨️ Imprimir / Guardar reporte PDF",
+                footer: "Colegio Bolívar | Construyendo un futuro más verde 🌎",
+                success: "¡Cálculo completado correctamente!",
+                error: "Por favor completa todos los campos con valores válidos.",
+                certificateTitle: "CERTIFICADO ECOLÓGICO",
+                certificateSubtitle: "Bolívar Eco-Calculator - Reporte ambiental semanal",
+                certificateMessage: "Resultados de tu impacto ambiental",
+                transportDetail: "Transporte:",
+                paperDetail: "Hojas utilizadas al día:",
+                recyclingDetail: "Nivel de reciclaje:",
+                dateDetail: "Fecha del reporte:",
+                certificateFooter: "¡Cada pequeña acción hace la diferencia! 🌍\nColegio Bolívar",
+                printError: "Por favor calcula tu impacto ambiental antes de imprimir."
+            }
+
+        };
+
+        let currentLanguage = "en";
+        let lastSimulation = null;
+
+        // Change language dynamically
+
+        function changeLanguage(language) {
+
+            currentLanguage = language;
+
+            document.documentElement.lang = language;
+
+            document.querySelectorAll("[data-i18n]").forEach(element => {
+
+                const key = element.getAttribute("data-i18n");
+
+                element.textContent = translations[language][key];
+
+            });
+
+            document.querySelectorAll("[data-i18n-placeholder]").forEach(element => {
+
+                const key = element.getAttribute("data-i18n-placeholder");
+
+                element.placeholder = translations[language][key];
+
+            });
+
+            if (lastSimulation) {
+                updateCertificate();
+            }
+
+        }
+
+        // Calculate environmental impact
+
         const form = document.getElementById("ecoForm");
 
         form.addEventListener("submit", function(event) {
+
             event.preventDefault();
 
             const transport = document.getElementById("transport").value;
-            const paper = Number(document.getElementById("paper").value);
+            const paperInput = document.getElementById("paper").value;
+            const paper = Number(paperInput);
             const recycling = document.getElementById("recycling").value;
+
             const message = document.getElementById("message");
 
             // Validate inputs
-            if (transport === "" || recycling === "" ||
-                document.getElementById("paper").value === "" ||
-                !Number.isInteger(paper) || paper < 0) {
 
-                message.textContent =
-                    "Please complete all fields with valid values.";
+            if (
+                transport === "" ||
+                recycling === "" ||
+                paperInput === "" ||
+                !Number.isInteger(paper) ||
+                paper < 0
+            ) {
+
+                message.textContent = translations[currentLanguage].error;
+                lastSimulation = null;
                 return;
+
             }
 
             // Estimated calculation assumptions
+
             const schoolDays = 5;
             const paperEmission = 0.004;
 
@@ -291,34 +660,110 @@
             const totalCO2 = transportCO2 + paperCO2;
 
             // Eco-Points calculation
+
             const transportPoints =
                 transport === "0" ? 40 :
                 transport === "1" ? 30 :
                 transport === "1.5" ? 20 : 10;
 
-            const paperPoints =
-                Math.max(0, 30 - paper);
+            const paperPoints = Math.max(0, 30 - paper);
 
-            const recyclingPoints =
-                Number(recycling) * 30;
+            const recyclingPoints = Number(recycling) * 30;
 
             const ecoPoints = Math.round(
                 transportPoints + paperPoints + recyclingPoints
             );
 
+            // Save simulation data
+
+            lastSimulation = {
+                transport: transport,
+                paper: paper,
+                recycling: recycling,
+                totalCO2: totalCO2,
+                ecoPoints: ecoPoints
+            };
+
             // Display results
+
             document.getElementById("co2Result").textContent =
                 totalCO2.toFixed(2) + " kg";
 
             document.getElementById("pointsResult").textContent =
                 ecoPoints + " / 100";
 
-            message.textContent =
-                "Calculation completed successfully!";
+            message.textContent = translations[currentLanguage].success;
+
+            updateCertificate();
+
         });
+
+        // Update printable certificate
+
+        function updateCertificate() {
+
+            if (!lastSimulation) return;
+
+            const data = lastSimulation;
+            const language = currentLanguage;
+
+            const transportKey = {
+                "1": "bus",
+                "3": "privateCar",
+                "1.5": "sharedCar",
+                "0": "bicycle"
+            };
+
+            const recyclingKey = {
+                "0": "none",
+                "0.25": "low",
+                "0.5": "medium",
+                "0.75": "high"
+            };
+
+            document.getElementById("printCO2").textContent =
+                data.totalCO2.toFixed(2) + " kg";
+
+            document.getElementById("printPoints").textContent =
+                data.ecoPoints + " / 100";
+
+            document.getElementById("printTransport").textContent =
+                translations[language][transportKey[data.transport]];
+
+            document.getElementById("printPaper").textContent =
+                data.paper;
+
+            document.getElementById("printRecycling").textContent =
+                translations[language][recyclingKey[data.recycling]];
+
+            document.getElementById("printDate").textContent =
+                new Date().toLocaleDateString(
+                    language === "es" ? "es-CO" : "en-US"
+                );
+
+        }
+
+        // Print or save PDF
+
+        function printReport() {
+
+            if (!lastSimulation) {
+
+                alert(translations[currentLanguage].printError);
+                return;
+
+            }
+
+            updateCertificate();
+
+            window.print();
+
+        }
+
     </script>
 
 </body>
 </html>
+
 
 
